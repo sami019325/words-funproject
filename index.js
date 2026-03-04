@@ -10,7 +10,7 @@ const app = express();
 
 // Basic Middlewares
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || '*'
+    origin: process.env.CORS_ORIGIN
 }));
 app.use(express.json());
 
@@ -21,11 +21,11 @@ app.use('/api/words', wordRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/words_db')
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB', err));
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
