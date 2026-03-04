@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Words & Wisdom | Aajamns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .slider-panel {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+        }
+
+        .slider-panel.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8fafc] text-slate-900 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 glass border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
+            <div
+                class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-200">
+                W</div>
+            <span class="text-xl font-bold tracking-tight text-slate-800">Words & Wisdom</span>
+        </div>
+        <a href="https://aajamns.com"
+            class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            back to aajamns home page
+        </a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
+                Search a word and see if <br /><span class="text-indigo-600">i wrote something</span> about that
+            </h1>
+
+            <!-- Search Bar -->
+            <div class="relative max-w-2xl mx-auto flex gap-4">
+                <div class="relative flex-1">
+                    <input type="text" id="searchInput" placeholder="Search for a word..."
+                        class="w-full px-8 py-5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-xl transition-all shadow-xl shadow-slate-200/50">
+                    <div id="searchResults"
+                        class="absolute top-full left-0 right-0 mt-4 glass rounded-2xl shadow-2xl overflow-hidden hidden z-30 max-h-[400px] overflow-y-auto">
+                        <!-- Dynamic Results -->
+                    </div>
+                </div>
+                <button id="searchBtn"
+                    class="bg-indigo-600 text-white px-8 py-5 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResultsSection"
+            class="hidden text-center p-12 glass rounded-3xl border-2 border-dashed border-slate-300">
+            <h2 class="text-2xl font-bold mb-2">Word not found</h2>
+            <p class="text-slate-500">I haven't written anything about this word yet.</p>
+        </div>
+    </main>
+
+    <!-- Slider Panel (90% width) -->
+    <div id="sliderPanel"
+        class="fixed top-0 right-0 h-full w-[90%] bg-white z-50 shadow-2xl slider-panel overflow-y-auto">
+        <div class="sticky top-0 glass px-8 py-6 flex justify-between items-center border-b border-slate-100 z-10">
+            <h2 id="sliderTitle" class="text-3xl font-bold text-slate-900">Word Title</h2>
+            <button onclick="closeSlider()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-8 lg:p-16 max-w-5xl mx-auto">
+            <!-- Word Details -->
+            <div id="wordDetails" class="mb-16">
+                <div class="flex items-center gap-4 mb-8">
+                    <span id="wordAuthor"
+                        class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold">@author</span>
+                    <span id="wordDate" class="text-slate-400 text-sm italic">Posted on ...</span>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-xl font-bold text-slate-400 uppercase tracking-widest mb-4">Meaning</h3>
+                    <p id="wordMeaning" class="text-2xl text-slate-700 italic border-l-4 border-indigo-200 pl-8 py-2">
+                        Meaning goes here...</p>
+                </div>
+
+                <div class="prose prose-lg max-w-none text-slate-700 leading-relaxed mb-12">
+                    <p id="wordContent">Content goes here...</p>
+                </div>
+
+                <!-- Links Section -->
+                <div id="linksSection" class="mb-16 space-y-6">
+                    <!-- Links and Frames here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Modal (Embeds) -->
+    <div id="linkSlider"
+        class="fixed top-0 left-0 h-full w-full bg-slate-900/90 z-[70] hidden flex flex-col items-center justify-center p-8">
+        <button onclick="closeLinkSlider()"
+            class="absolute top-8 right-8 text-white hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div id="linkEmbedContainer"
+            class="w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl mb-8">
+            <!-- Iframe injected here -->
+        </div>
+        <a id="linkTargetBtn" href="#" target="_blank"
+            class="bg-white text-slate-900 px-12 py-5 rounded-full font-bold text-xl hover:bg-slate-100 transition-all flex items-center gap-4">
+            Visit Original Link
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+        </a>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
